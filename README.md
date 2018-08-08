@@ -1,24 +1,25 @@
-# README
+## Coinbase Account Viewer
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+A simple application to demonstrate the following:
 
-* Ruby version
+- Ruby Development
+- Coinbase API
+- REST
+- TDD
+- 12 Factor
+- Containerized/Dockerized deployment
 
-* System dependencies
 
-* Configuration
+## Design
 
-* Database creation
+### Models
 
-* Database initialization
+- User: API credentials
+- Account: Replicate coinbase account object 
 
-* How to run the test suite
+### Controllers
 
-* Services (job queues, cache servers, search engines, etc.)
+- Session: 'Login' flow 
+- Account: Show account details (singular route)
 
-* Deployment instructions
-
-* ...
