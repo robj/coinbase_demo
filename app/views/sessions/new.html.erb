@@ -1,0 +1,9 @@
+sessions#new <br>
+
+<%= form_for :user, :url =>  sessions_path do |f| %>
+  <%= f.label "API Key" %> 
+  <%= f.text_field :api_key %> <br>
+  <%= f.label "API Secret" %> 
+  <%= f.text_field :api_secret %><br>
+  <%= f.submit "Submit" %> 
+<% end %>
