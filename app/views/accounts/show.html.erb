@@ -1,1 +1,10 @@
-show
+<% if @account %> 
+    
+    <%= render partial: 'account', locals: {account: @account} %>
+
+<% else %>
+
+    Coinbase API returned error: <%= @error %>
+
+<% end %>
+
