@@ -1,19 +1,20 @@
 class Account
- include Virtus.model
- include ActiveModel::Model
- include ActiveModel::SerializerSupport
 
- attribute :id, String
- attribute :name, String
- attribute :primary, Boolean
- attribute :type, String
- attribute :currency, String
- attribute :balance, Hash
- attribute :created_at, DateTime
- attribute :updated_at, DateTime
- attribute :resource, String
- attribute :resource_path, String
- attribute :native_balance, Hash
+  include Virtus.model
+  include ActiveModel::Model
+  include ActiveModel::SerializerSupport
+
+  attribute :id, String
+  attribute :name, String
+  attribute :primary, Boolean
+  attribute :type, String
+  attribute :currency, String
+  attribute :balance, Hash
+  attribute :created_at, DateTime
+  attribute :updated_at, DateTime
+  attribute :resource, String
+  attribute :resource_path, String
+  attribute :native_balance, Hash
 
 end
 
