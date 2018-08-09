@@ -1,9 +1,14 @@
-sessions#new <br>
-
 <%= form_for :user, :url =>  sessions_path do |f| %>
-  <%= f.label "API Key" %> 
+
+  <%= f.label :api_key , "API Key" %> 
   <%= f.text_field :api_key %> <br>
-  <%= f.label "API Secret" %> 
+
+  <%= f.label :api_secret, "API Secret" %> 
   <%= f.text_field :api_secret %><br>
-  <%= f.submit "Submit" %> 
+
+  <%= f.label :return_json, "return JSON from API" %> 
+  <%= f.check_box :return_json %><br>
+
+  <%= f.submit "Submit" %>
+
 <% end %>
