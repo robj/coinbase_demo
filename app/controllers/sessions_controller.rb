@@ -4,7 +4,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-      render plain: "sessions#create\napi_key: #{session_params[:api_key]}"
+      #for stateless demo purposes, redirect to account#show with API credentials as params
+      redirect_to account_path(api_key: session_params[:api_key], api_secret: session_params[:api_secret])
   end
 
 
