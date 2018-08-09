@@ -1,6 +1,7 @@
 class Account
  include Virtus.model
  include ActiveModel::Model
+ include ActiveModel::SerializerSupport
 
  attribute :id, String
  attribute :name, String
