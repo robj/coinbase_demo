@@ -9,7 +9,7 @@ A simple application to demonstrate the following:
 - 12 Factor
 - Containerized/Dockerized deployment
 
-Examples of a server side apps that make requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. 
+Examples of server side apps that make requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. 
 
 ## Design
 
