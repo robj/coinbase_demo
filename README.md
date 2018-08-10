@@ -73,7 +73,15 @@ This is live (not mocked) therefore requires `API_KEY` and `API_SECRET` env vars
 
 `$ API_KEY=2qOhIaJoEW8G02Y4 API_SECRET=<your_api_secret> bundle exec rspec`
 
+```
+CoinbaseAccountParser
+  #.get_account
+    returns true and Account object upon successful request to Coinbase API
+    returns false and error message upon unsuccessful request to Coinbase API
 
+Finished in 0.76453 seconds (files took 2.8 seconds to load)
+2 examples, 0 failures
+```
 
 
 ## Dockerized Deployment
