@@ -1,4 +1,4 @@
-## Coinbase Account Viewer
+# Coinbase Account Viewer
 
 
 A simple application to demonstrate the following:
@@ -9,7 +9,10 @@ A simple application to demonstrate the following:
 - 12 Factor
 - Containerized/Dockerized deployment
 
-Examples of server side apps that make requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. 
+
+The app requests the primary wallet (the API key used must have the "wallet:accounts:read" auth scope) and displays wallet information to the user as a HTML page or alternatively (via checkbox) uses the API controller to return the account in JSON format.
+
+Examples of server side apps that make similar requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. Concepts demonstrated here can be used as a starting point to build a more fully function app.
 
 ## Design
 
@@ -22,7 +25,7 @@ Examples of server side apps that make requests with a coinbase user's API crede
 ### Security
 
 - SSL required to protect API credentials from middleman attacks.
-- Due to the demo's stateless nature, the accounts#show action exposes the api_secret param in the URL (which looks particulary insecure to an end user).
+- Due to the demo's stateless nature, the accounts#show action exposes the api_secret param in the URL (which looks particulary insecure to an end user) and would not be recommended for this behaviour to exist in a production app. (eg. risk of saving API secret into a browser bookmark)
 
 ### Models
 
@@ -42,7 +45,7 @@ Examples of server side apps that make requests with a coinbase user's API crede
 
 ### Gems
 
-- Virtus: 'Attributes on Steroids for Plain Old Ruby Objects'. Simple PORO models and object initialisation / type coersion from a JSON hash.
+- Virtus: 'Attributes on Steroids for Plain Old Ruby Objects'. Simple PORO models and object initialisation / ruby type coersion from a JSON hash.
 
 - Coinbase: 'official client library for the Coinbase Wallet API v2'
 
@@ -72,3 +75,5 @@ This is live (not mocked) therefore requires `API_KEY` and `API_SECRET` env vars
 
 
 
+
+## Dockerized Deployment
