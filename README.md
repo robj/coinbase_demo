@@ -48,7 +48,7 @@ Examples of server side apps that make requests with a coinbase user's API crede
 
 ### Versioned RESTful JSON API
 
-- v1 by default unless version header specifies. Boilerplate from http://jes.al/2013/10/architecting-restful-rails-4-api/
+- v1 by default unless version header specifies otherwise. Boilerplate from http://jes.al/2013/10/architecting-restful-rails-4-api/
 - API uses ActiveModelSerializers for serialization
 
 see
@@ -60,6 +60,15 @@ see
 `/app/serializers/account_serializer.rb`
 
 
+### Tests
+
+A single spec exists for CoinbaseAccountParser.
+
+`spec/lib/coinbase_account_parser_spec.rb`
+
+This is live (not mocked) therefore requires `API_KEY` and `API_SECRET` env vars to run.
+
+`$ API_KEY=2qOhIaJoEW8G02Y4 API_SECRET=<your_api_secret> bundle exec rspec`
 
 
 
