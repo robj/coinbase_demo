@@ -2,7 +2,7 @@
 defaults: &defaults
   web_frontend:
     price_ticker:
-      enabled: <%= ENV['WEB_FRONTEND_ENABLE_TICKER'] %>
+      enabled: <%= ENV['WEB_FRONTEND_PRICE_TICKER_ENABLED'] %>
       refresh: <%= ENV['WEB_FRONTEND_PRICE_TICKER_REFRESH'] %>
 
   coinbase:
