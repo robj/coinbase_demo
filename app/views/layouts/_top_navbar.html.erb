@@ -1,0 +1,18 @@
+<nav class="navbar navbar-dark bg-dark">
+
+  <span class="navbar-brand mb-0 h1">Coinbase Demo</span>
+
+  <% if Settings.web_frontend.price_ticker.enabled %>
+    <span class="navbar-text mb-0">
+      BTC/USD <span id="liveprice"></span>
+    </span>
+
+    <script>
+       initializePriceTickerPolling("<%= Settings.coinbase.api.base_url %>", <%= Settings.web_frontend.price_ticker.refresh %>, "#liveprice" )
+    </script>
+
+  <% else %>
+      Price Ticker disabled
+  <% end %>
+
+</nav>
