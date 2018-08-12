@@ -1,0 +1,14 @@
+# config/application.yml
+defaults: &defaults
+  coinbase:
+    api:
+      base_url: <%= ENV['COINBASE_API_BASE_URL'] %>
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

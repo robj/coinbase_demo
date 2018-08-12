@@ -39,6 +39,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'virtus'
 gem 'coinbase'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
+gem 'settingslogic'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
