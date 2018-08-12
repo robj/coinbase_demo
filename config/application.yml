@@ -1,5 +1,10 @@
 # config/application.yml
 defaults: &defaults
+  web_frontend:
+    price_ticker:
+      enabled: <%= ENV['WEB_FRONTEND_ENABLE_TICKER'] %>
+      refresh: <%= ENV['WEB_FRONTEND_PRICE_TICKER_REFRESH'] %>
+
   coinbase:
     api:
       base_url: <%= ENV['COINBASE_API_BASE_URL'] %>
