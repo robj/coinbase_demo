@@ -3,7 +3,8 @@
 
 A simple application to demonstrate the following:
 
-- Rails Development
+- Ruby on Rails Development best practices
+- Modern Javascript (ES2016 classes, promises) / unobstructive JS
 - Coinbase API
 - RESTful design
 - 12 Factor
@@ -49,6 +50,8 @@ Examples of server side apps that make similar requests with a coinbase user's A
 
 - Coinbase: 'official client library for the Coinbase Wallet API v2'
 
+- SettingsLogic: Encapsulate app/env configuration
+
 ### Versioned RESTful JSON API
 
 - v1 by default unless version header specifies otherwise. Boilerplate from http://jes.al/2013/10/architecting-restful-rails-4-api/
@@ -82,6 +85,15 @@ CoinbaseAccountParser
 Finished in 0.76453 seconds (files took 2.8 seconds to load)
 2 examples, 0 failures
 ```
+
+### Javascript Ticker
+
+```
+export WEB_FRONTEND_PRICE_TICKER_ENABLED=true
+export WEB_FRONTEND_PRICE_TICKER_REFRESH=5
+```
+
+`app/assets/javascripts/price_ticker.js`
 
 
 ## Dockerized Deployment

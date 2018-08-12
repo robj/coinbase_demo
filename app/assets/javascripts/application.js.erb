@@ -14,3 +14,12 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
+
+
+<% if Settings.web_frontend.price_ticker.enabled %>
+
+  $(document).ready(function() {
+    initializePriceTickerPolling("<%= Settings.coinbase.api.base_url %>", <%= Settings.web_frontend.price_ticker.refresh %>, "#liveprice" )
+  });
+  
+<% end %>
