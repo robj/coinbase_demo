@@ -5,11 +5,12 @@ class AccountSerializer < ActiveModel::Serializer
   attribute :primary
   attribute :type
   attribute :currency
-  attribute :balance
   attribute :created_at
   attribute :updated_at
   attribute :resource
   attribute :resource_path
-  attribute :native_balance
+
+  has_one :balance
+  has_one :native_balance
   
 end

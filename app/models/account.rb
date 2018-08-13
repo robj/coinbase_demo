@@ -9,12 +9,12 @@ class Account
   attribute :primary, Boolean
   attribute :type, String
   attribute :currency, String
-  attribute :balance, Hash
+  attribute :balance, Price
   attribute :created_at, DateTime
   attribute :updated_at, DateTime
   attribute :resource, String
   attribute :resource_path, String
-  attribute :native_balance, Hash
+  attribute :native_balance, Price
 
 end
 
