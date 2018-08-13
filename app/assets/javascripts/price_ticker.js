@@ -9,7 +9,8 @@ class PriceTicker {
   }
 
   updateHTML(price) {
-    $(this.htmlPriceFragment).html(price)
+    $(this.htmlPriceFragment).hide()
+    $(this.htmlPriceFragment).html(price).fadeIn('slow')
   }
 
   fetchLatestPriceAndUpdate() {
