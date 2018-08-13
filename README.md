@@ -7,13 +7,13 @@ A simple application to demonstrate the following:
 - Modern Javascript (ES2016 classes, promises) / unobstructive JS
 - Coinbase API
 - RESTful design
-- 12 Factor
+- 12 Factor configuration
 - Containerized/Dockerized deployment
 
 
 The app requests the primary wallet (the API key used must have the "wallet:accounts:read" auth scope) and displays wallet information to the user as a HTML page or alternatively (via checkbox) uses the API controller to return the account in JSON format.
 
-Examples of server side apps that make similar requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. Concepts demonstrated here can be used as a starting point to build a more fully function app.
+Examples of server side apps that make similar requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. Concepts demonstrated here can be used as a starting point to build a more fully functioned app.
 
 ## Design
 
@@ -32,6 +32,7 @@ Examples of server side apps that make similar requests with a coinbase user's A
 
 - User: API credentials
 - Account: Replicate coinbase account object 
+- Price: Amount/Currency pair. (use BigDecimal when working with prices)
 
 ### Controllers
 
@@ -46,11 +47,31 @@ Examples of server side apps that make similar requests with a coinbase user's A
 
 ### Gems
 
-- Virtus: 'Attributes on Steroids for Plain Old Ruby Objects'. Simple PORO models and object initialisation / ruby type coersion from a JSON hash.
+- Virtus: 'Attributes on Steroids for Plain Old Ruby Objects'. Simple PORO models and object initialisation / associations / ruby type coersion from a JSON hash.
 
 - Coinbase: 'official client library for the Coinbase Wallet API v2'
 
 - SettingsLogic: Encapsulate app/env configuration
+
+### Settings
+
+
+- Pull in ENV vars for app config (12 factor)
+
+`config/application.yml`
+
+```
+defaults: &defaults
+  web_frontend:
+    price_ticker:
+      enabled: <%= ENV['WEB_FRONTEND_PRICE_TICKER_ENABLED'] %>
+      refresh: <%= ENV['WEB_FRONTEND_PRICE_TICKER_REFRESH'] %>
+
+  coinbase:
+    api:
+      base_url: <%= ENV['COINBASE_API_BASE_URL'] %>
+
+```
 
 ### Versioned RESTful JSON API
 
@@ -65,6 +86,17 @@ see
 
 `/app/serializers/account_serializer.rb`
 
+`/app/serializers/price_serializer.rb`
+
+Note: Price.amount (BigDecimal) is serialized as a string as per default behavior, see discussion:
+
+```
+https://stackoverflow.com/questions/6128794/rails-json-serialization-of-decimal-adds-quotes
+
+https://github.com/rails/rails/issues/6033
+
+https://github.com/rails/rails/pull/6040
+```
 
 ### Tests
 
@@ -74,7 +106,7 @@ A single spec exists for CoinbaseAccountParser.
 
 This is live (not mocked) therefore requires `API_KEY` and `API_SECRET` env vars to run.
 
-`$ API_KEY=2qOhIaJoEW8G02Y4 API_SECRET=<your_api_secret> bundle exec rspec`
+`$ API_KEY=2qOhIaJoEW8G02Y4 API_SECRET=<your_api_secret> bundle exec rspec  -f d`
 
 ```
 CoinbaseAccountParser
@@ -94,6 +126,10 @@ export WEB_FRONTEND_PRICE_TICKER_REFRESH=5
 ```
 
 `app/assets/javascripts/price_ticker.js`
+
+If enabled in Settings/ENV then initialised from:
+
+`app/assets/javascripts/application.js.erb`
 
 
 ## Dockerized Deployment
