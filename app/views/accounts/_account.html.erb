@@ -30,11 +30,11 @@
     </tr>
     <tr>
         <td>created_at:</td>
-        <td><%= account.created_at %></td>
+        <td><%= account.created_at.to_formatted_s(:long)  %></td>
     </tr>
     <tr>
         <td>updated_at:</td>
-        <td><%= account.updated_at %></td>
+        <td><%= account.updated_at.to_formatted_s(:long)  %></td>
     </tr>           
     <tr>
         <td>resource:</td>
