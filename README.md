@@ -364,3 +364,80 @@ $ eb ssh
 - Hardcoded ECR repository in `Dockerrun.aws.json`
 
 
+
+## Git Log
+
+`git shortlog`
+
+```
+robj (67):
+      new rails 5 application
+      home controller and views
+      account controller and views
+      initial home and singular account route
+      add virtus gem
+      working sessions user login form
+      initial Account model
+      replaced home controller with sessiosn controller
+      document design decisions
+      add coinbase gem
+      account model matching coinbase account
+      coinbase account parsing and views
+      redirect from sessions#create to account#show with api credentials submitted
+      updated docs
+      remove unused account#index view
+      basic versioned API plumbing from http://jes.al/2013/10/architecting-restful-rails-4-api/
+      base API v1 controller
+      initial api v1 accounts controller
+      add active_model_serializers gem, use 0-8 branch for Virtus compatability
+      include ActiveModel::SerializerSupport for AMS support
+      initial account serializer
+      account parse and return json
+      error handling: ensure required params are present
+      fix indentation
+      fix indentation
+      return json from api option
+      return json from api checkbox
+      add bootstrap to application layout using CDN
+      boostrap container in application layout
+      use bootstrap 4, add navbar
+      give main container 40px margin from top
+      button styling
+      table bs css classes
+      updated docs
+      update docs
+      add rspec
+      not using DB, so remove active record references from rspec rails helper
+      initial spec for coinbase_account_parser
+      add rspec test docs
+      update docs
+      additionally test to be_a_kind_of(Account)
+      update docs
+      add settingslogic, config from env vars
+      configure price ticker through settingslogic + ENV
+      add JS price ticker
+      price ticker config
+      make JS unobtrusive, move initializePriceTickerPolling to application.js
+      fadeIn on price ticker html change
+      properly handle Price as a class rather than coercsion into a Hash
+      pretty print dates
+      updated docs
+      production uglifier support for ES6 syntax
+      conditional initialisation of price ticker not compatible with precompilation, move initialise code from application.js back into a the top_navbar partial
+      moved from application.js.erb back to application.js
+      add Dockerfile
+      add AWS ElasticBeanstlak config
+      Dockerrun.aws.json
+      update gitignore with elasticbeanstalk * aws_deploy_env exclusions
+      add docker build and push script
+      check awscli and docker installed before running
+      rename ambiguous API_KEY to COINBASE_API_KEY in spec
+      rename ambiguous API_KEY to COINBASE_API_KEY in docs
+      load .env with Dotenv in development and test envs
+      use dotenv-rails over dotenv
+      Dotenv.load if Rails.env.development?
+      development .env file sources by Dotenv
+      doc update
+      proper use of bs4 padding class
+      warning about api credentials over non-secure connection
+```
