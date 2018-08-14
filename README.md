@@ -53,10 +53,12 @@ Examples of server side apps that make similar requests with a coinbase user's A
 
 - SettingsLogic: Encapsulate app/env configuration
 
+- Dotenv: source .env in development environment
+
 ### Settings
 
 
-- Pull in ENV vars for app config (12 factor)
+- Settingslogic - pull in ENV vars for app config (12 factor)
 
 `config/application.yml`
 
@@ -71,6 +73,14 @@ defaults: &defaults
     api:
       base_url: <%= ENV['COINBASE_API_BASE_URL'] %>
 
+```
+
+- In development use Dotenv to source `.env` , in production these are configured in the app platform.
+
+```
+export WEB_FRONTEND_PRICE_TICKER_ENABLED=true
+export WEB_FRONTEND_PRICE_TICKER_REFRESH=5
+export COINBASE_API_BASE_URL="https://api.coinbase.com/v2/"
 ```
 
 ### Versioned RESTful JSON API
@@ -120,11 +130,6 @@ Finished in 0.76453 seconds (files took 2.8 seconds to load)
 
 ### Javascript Ticker
 
-```
-export WEB_FRONTEND_PRICE_TICKER_ENABLED=true
-export WEB_FRONTEND_PRICE_TICKER_REFRESH=5
-```
-
 `app/assets/javascripts/price_ticker.js`
 
 If enabled in Settings/ENV then initialised from:
@@ -135,6 +140,8 @@ If enabled in Settings/ENV then initialised from:
 ## Dockerized Deployment
 
 ### Dockerfile
+
+- logs to stdout as per 12 factor
 
 ```
 FROM ruby:2.5.1-stretch
@@ -195,13 +202,7 @@ EXPOSE 3000
 
 ##### Users
 
-- New User *cb_deploy* with programatic API access
-
-
-```
-export AWS_ACCESS_KEY_ID=<key id>
-export AWS_SECRET_ACCESS_KEY=<key>
-```
+- New User *cb_deploy* with programatic API access (access key/secret)
 
 Permissions:
 
@@ -345,6 +346,8 @@ $ eb setenv COINBASE_API_BASE_URL=https://api.coinbase.com/v2/
 
 
 #### Elastic Beanstalk Deploy
+
+- Deploys docker image from ECR as per Dockerrun.aws.json
 
 ```
 $ eb deploy
