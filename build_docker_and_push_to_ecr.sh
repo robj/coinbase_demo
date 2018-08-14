@@ -9,6 +9,16 @@ else
     source $DEPLOY_ENV_FILENAME
 fi
 
+if [ ! $(which aws) ]; then
+    echo "AWS CLI utilities not installed"
+    exit 1
+fi
+
+if [ ! $(which docker) ]; then
+    echo "Docker not installed"
+    exit 1
+fi
+
 #login
 $(aws ecr get-login --no-include-email --region $AWS_REGION)
 
