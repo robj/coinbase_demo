@@ -4,7 +4,7 @@
 A simple application to demonstrate the following:
 
 - Ruby on Rails Development best practices
-- Modern Javascript (ES2016 classes, promises) / unobstructive JS
+- Modern Javascript (ES6 classes, promises) / unobstructive JS
 - Coinbase API
 - RESTful design
 - 12 Factor configuration
@@ -104,9 +104,9 @@ A single spec exists for CoinbaseAccountParser.
 
 `spec/lib/coinbase_account_parser_spec.rb`
 
-This is live (not mocked) therefore requires `API_KEY` and `API_SECRET` env vars to run.
+This is live (not mocked) therefore requires `COINBASE_API_KEY` and `COINBASE_API_SECRET` env vars to run.
 
-`$ API_KEY=2qOhIaJoEW8G02Y4 API_SECRET=<your_api_secret> bundle exec rspec  -f d`
+`$ COINBASE_API_KEY=2qOhIaJoEW8G02Y4 COINBASE_API_SECRET=<your_api_secret> bundle exec rspec  -f d`
 
 ```
 CoinbaseAccountParser
@@ -133,3 +133,231 @@ If enabled in Settings/ENV then initialised from:
 
 
 ## Dockerized Deployment
+
+### Dockerfile
+
+```
+FROM ruby:2.5.1-stretch
+
+# Install apt based dependencies required to run Rails as
+# well as RubyGems. As the Ruby image itself is based on a
+# Debian image, we use apt-get to install those.
+RUN apt-get update && apt-get install -y --force-yes \
+  build-essential \
+  nodejs \
+  yarn
+
+
+ENV RAILS_ENV production
+ENV RACK_ENV production
+ENV RAILS_SERVE_STATIC_FILES true
+ENV RAILS_LOG_TO_STDOUT true
+
+# directory used in any further RUN, COPY, and ENTRYPOINT
+# commands.
+RUN mkdir -p /app
+WORKDIR /app
+
+# Copy the Gemfile as well as the Gemfile.lock and install
+# the RubyGems. This is a separate step so the dependencies
+# will be cached unless changes to one of those two files
+# are made.
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler && bundle install --jobs 20 --retry 5
+
+
+# Copy the main application.
+COPY . ./
+
+# Precompile Assets
+RUN bundle exec rake assets:precompile
+
+
+# Expose port 3000 to the Docker host, so we can access it
+# from the outside.
+EXPOSE 3000
+```
+
+###AWS
+
+
+#### Elastic Beanstalk
+
+* New Application through wizard *coinbase_demo*
+  * New environment *coinbase-demo-prd*  
+     * Platform: Docker
+
+#### Elastic Container Registry
+
+* New Docker Repository *coinbase_demo*
+
+#### IAM
+
+##### Users
+
+- New User *cb_deploy* with programatic API access
+
+
+```
+export AWS_ACCESS_KEY_ID=<key id>
+export AWS_SECRET_ACCESS_KEY=<key>
+```
+
+Permissions:
+
+* AWSElasticBeanstalkFullAccess
+* AmazonEC2ContainerRegistryPowerUser
+
+
+##### Roles
+  
+  Added `AmazonEC2ContainerRegistryReadOnly` policy to `aws-elasticbeanstalk-ec2-role`
+
+
+
+#### Docker build and push to AWS ECR repository
+
+Environment `aws_deploy_env.sh` (not stored in repo, gitignored)
+
+```
+export AWS_ACCESS_KEY_ID=AKIAJBDD6O4UDZ3N6OZA
+export AWS_SECRET_ACCESS_KEY=<key>
+export AWS_REGION=us-east-1
+export ECR_REPOSITORY=902981585923.dkr.ecr.us-east-1.amazonaws.com
+export APP_NAME=coinbase_demo
+export DOCKER_TAG=$APP_NAME:latest
+```
+
+Build and Push script 
+
+`build_docker_and_push_to_ecr.sh`
+
+```
+#!/bin/bash
+
+DEPLOY_ENV_FILENAME="aws_deploy_env.sh"
+
+if [ ! -f $DEPLOY_ENV_FILENAME ]; then
+    echo "$DEPLOY_ENV_FILENAME required"
+    exit 1
+else
+    source $DEPLOY_ENV_FILENAME
+fi
+
+if [ ! $(which aws) ]; then
+    echo "AWS CLI utilities not installed"
+    exit 1
+fi
+
+if [ ! $(which docker) ]; then
+    echo "Docker not installed"
+    exit 1
+fi
+
+#login
+$(aws ecr get-login --no-include-email --region $AWS_REGION)
+
+#build
+docker build -t $APP_NAME .
+
+#tag
+docker tag $DOCKER_TAG $ECR_REPOSITORY/$DOCKER_TAG
+
+#push
+docker push $ECR_REPOSITORY/$DOCKER_TAG
+```
+
+#### Elastic Beanstalk App config
+
+[Install awsebcli tools](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html)
+
+init with default options
+
+```
+$ eb init
+```
+
+configure EB to deploy via Dockerrun.aws.json artifact
+
+`Dockerrun.aws.json`
+
+```
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "902981585923.dkr.ecr.us-east-1.amazonaws.com/coinbase_demo:latest",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "3000"
+    }
+  ]
+}
+```
+
+`.elasticbeanstalk/config.yml`
+
+```
+branch-defaults:
+  master:
+    environment: coinbase-demo-prd
+global:
+  application_name: coinbase_demo
+  default_ec2_keyname: null
+  default_platform: 64bit Amazon Linux 2018.03 v2.12.0 running Docker 18.03.1-ce
+  default_region: us-east-1
+  profile: eb-cli
+
+deploy:
+  artifact: Dockerrun.aws.json
+```
+ 
+  
+#### Elastic Beanstalk Environment
+
+```
+$ eb status
+  Application name: coinbase_demo
+  Region: us-east-1
+  Deployed Version: app-0d15-180814_175529
+  Environment ID: e-fnfpbyypap
+  Platform: 64bit Amazon Linux 2018.03 v2.12.0 running Docker 18.03.1-ce
+  Tier: WebServer-Standard-1.0
+  CNAME: coinbase-demo-prd.us-east-1.elasticbeanstalk.com
+  Updated: 2018-08-14 16:57:01.117000+00:00
+  Status: Ready
+  Health: Green
+```
+
+```
+$ eb printenv
+ Environment Variables:
+     COINBASE_API_BASE_URL = https://api.coinbase.com/v2/
+     WEB_FRONTEND_PRICE_TICKER_ENABLED = true
+     WEB_FRONTEND_PRICE_TICKER_REFRESH = 5
+```
+
+```
+$ eb setenv COINBASE_API_BASE_URL=https://api.coinbase.com/v2/
+```
+
+
+
+#### Elastic Beanstalk Deploy
+
+```
+$ eb deploy
+```
+
+#### Elastic Beanstalk Instance SSH
+
+```
+$ eb ssh
+```
+
+## Unresolved deployment concerns
+
+- Hardcoded ECR repository in `Dockerrun.aws.json`
+
+
