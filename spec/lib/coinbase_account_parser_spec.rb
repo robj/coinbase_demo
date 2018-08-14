@@ -7,7 +7,7 @@ describe CoinbaseAccountParser do
 
         it "returns true and Account object upon successful request to Coinbase API" do
             cap = CoinbaseAccountParser.new
-            cap_retval = cap.get_account(ENV['API_KEY'],ENV['API_SECRET'])
+            cap_retval = cap.get_account(ENV['COINBASE_API_KEY'],ENV['COINBASE_API_SECRET'])
             expect(cap_retval).to eql true
             expect(cap.account).to be_truthy 
             expect(cap.account).to be_a_kind_of(Account) 
