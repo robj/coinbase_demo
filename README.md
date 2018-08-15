@@ -14,9 +14,9 @@ A simple application to demonstrate the following:
 - Containerized/Dockerized deployment
 
 
-The app requests the primary wallet (the API key used must have the "wallet:accounts:read" auth scope) and displays wallet information to the user as a HTML page or alternatively (via checkbox) uses the API controller to return the account in JSON format.
+The app requests the primary wallet (the coinbase API key used must have the "wallet:accounts:read" auth scope) and displays wallet information to the user as a HTML page or alternatively (via checkbox) uses the API controller to return the account in JSON format.
 
-Examples of server side apps that make similar requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. Concepts demonstrated here can be used as a starting point to build a more fully functioned app.
+Examples of server side applications that make requests with a coinbase user's API credentials include portfolio trackers, and tax calculation apps. Concepts demonstrated here can be used as a starting point to build a more fully functioned app.
 
 ## Design
 
@@ -61,7 +61,7 @@ Examples of server side apps that make similar requests with a coinbase user's A
 ### Settings
 
 
-- Settingslogic - pull in ENV vars for app config (12 factor)
+- Settingslogic - pull in ENV vars for app config (12 factor), access through Settings object. (eg. Settings.web_frontend.price_ticker.enabled)
 
 `config/application.yml`
 
@@ -119,9 +119,9 @@ A single spec exists for CoinbaseAccountParser.
 
 This is live (not mocked) therefore requires `COINBASE_API_KEY` and `COINBASE_API_SECRET` env vars to run.
 
-`$ COINBASE_API_KEY=2qOhIaJoEW8G02Y4 COINBASE_API_SECRET=<your_api_secret> bundle exec rspec  -f d`
-
 ```
+$ COINBASE_API_KEY=2qOhIaJoEW8G02Y4 COINBASE_API_SECRET=<your_api_secret> bundle exec rspec  -f d
+
 CoinbaseAccountParser
   #.get_account
     returns true and Account object upon successful request to Coinbase API
@@ -135,7 +135,7 @@ Finished in 0.76453 seconds (files took 2.8 seconds to load)
 
 `app/assets/javascripts/price_ticker.js`
 
-If enabled in Settings/ENV then initialised from:
+If enabled in Settings then initialised from:
 
 `app/assets/javascripts/application.js.erb`
 
@@ -144,6 +144,7 @@ If enabled in Settings/ENV then initialised from:
 
 ### Dockerfile
 
+- build from dockerhub ruby debian-stretch image
 - logs to stdout as per 12 factor
 
 ```
@@ -193,7 +194,7 @@ EXPOSE 3000
 
 #### Elastic Beanstalk
 
-* New Application through wizard *coinbase_demo*
+* New Application through web wizard *coinbase_demo*
   * New environment *coinbase-demo-prd*  
      * Platform: Docker
 
@@ -364,7 +365,7 @@ $ eb ssh
 
 ## Unresolved deployment concerns
 
-- Hardcoded ECR repository in `Dockerrun.aws.json`
+- Hardcoded ECR repository in `Dockerrun.aws.json`, would be nice to generate this file programatically.
 
 
 
